@@ -1,6 +1,6 @@
 # ! ASCII Art Contest.(Code forces problem  01)
-g, c, l = map(int, input().split())
 
+g, c, l = map(int, input().split())
 if not (80 <= g <= 100 and 80 <= c <= 100 and 80 <= l <= 100):
           print("check again")
           

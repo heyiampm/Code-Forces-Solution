@@ -1,4 +1,5 @@
 #Problem name:("Easy Problem")//(Code forces problem 05)
+
 t = int(input())
 for _ in range(t):
           n= int(input())
