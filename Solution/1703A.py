@@ -1,4 +1,4 @@
-#Problem name:("YES or YES?")//(Code forces problem 26)
+#Problem name:("YES or YES?")//(Code forces problem 27)
 
 t = int(input())
 for _ in range(t):
