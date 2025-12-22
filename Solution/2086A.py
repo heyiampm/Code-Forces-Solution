@@ -3,5 +3,5 @@
 t = int(input())
 for _ in range(t):
           n = int(input())
-          value = 2*n
+          value = 2 * n
           print(value)
