@@ -7,4 +7,4 @@ for _ in range(t):
           mex = 0
           while mex in A:
                     mex+=1
-          print(mex)
+          print(mex) 
