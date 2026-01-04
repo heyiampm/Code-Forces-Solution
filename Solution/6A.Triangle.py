@@ -1,4 +1,4 @@
-#Problem name:("Triangle")//(Code forces problem 41)
+#Problem name:("Triangle")//(Day 41)
 
 a=sorted(map(int,input().split()))
 ok=seg=0

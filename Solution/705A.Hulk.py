@@ -1,4 +1,4 @@
-#Problem name:("Hulk")//(Code forces problem 42)
+#Problem name:("Hulk")//(Code forces problem 71)
 
 def hulk():
           n = int(input())

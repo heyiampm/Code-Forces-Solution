@@ -1,4 +1,4 @@
-#Problem name:("Watermelon")//(Code forces problem 21)
+#Problem name:("Watermelon")//(Day 21)
 
 w = int (input())
 if w > 2 and w % 2 == 0:

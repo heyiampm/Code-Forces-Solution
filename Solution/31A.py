@@ -1,4 +1,4 @@
-#Problem name:("Worms Evolution")//(Code forces problem 32)
+#Problem name:("Worms Evolution")//(Day 32)
 
 
 n = int(input())

@@ -1,4 +1,4 @@
-#Problem name:("Letter")//(Code forces problem 42)
+#Problem name:("Letter")//(Day 42)
 
 from collections import Counter
 s1 = input()

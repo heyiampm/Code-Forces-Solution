@@ -1,4 +1,4 @@
-#Problem name:("Theatre Square")//(Code forces problem 20)
+#Problem name:("Theatre Square")//(Day 20)
 
 n, m, a = map(int, input().split())
 tiles_n = (n + a - 1) // a

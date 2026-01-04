@@ -1,4 +1,4 @@
-#Problem name:("Translation")//(Code forces problem 36)
+#Problem name:("Translation")//(Day 36)
 
 s = input().strip()
 t = input().strip()
