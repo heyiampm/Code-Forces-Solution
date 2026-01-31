@@ -1,4 +1,4 @@
-# problem can be found at http://codeforces.com/problemset/problem/266/A
+# problem can a be found at http://codeforces.com/problemset/problem/266/A
 
 n = int(input())
 s = input().strip()
