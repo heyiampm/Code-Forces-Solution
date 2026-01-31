@@ -2,7 +2,7 @@
 
 b, g = map(int, input().split())
 
-print(b + g - 1)
+print(b + g - 1) 
 
 for i in range(1, g + 1):
           print("%d %d" % (1, i))
