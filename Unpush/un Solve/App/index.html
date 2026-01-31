@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+          <head>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                    <title>QR Code Generator App</title>
+                    <style>
+                              body {
+                                        font-family: Arial, sans-serif;
+                                        background: #f2f2f2;
+                                        margin: 0;
+                                        padding: 0;
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+                              }
+
+                              header {
+                                        width: 100%;
+                                        background: #4a90e2;
+                                        color: white;
+                                        padding: 12px 20px;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 12px;
+                                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                              }
+
+                              header img {
+                                        width: 50px;
+                                        height: 50px;
+                                        border-radius: 50%;
+                                        object-fit: cover;
+                              }
+
+                              header h1 {
+                                        font-size: 22px;
+                                        margin: 0;
+                              }
+
+                              .container {
+                                        margin-top: 30px;
+                                        background: white;
+                                        padding: 20px;
+                                        border-radius: 10px;
+                                        width: 90%;
+                                        max-width: 480px;
+                                        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+                              }
+
+                              input[type="text"] {
+                                        width: calc(100% - 28px);
+                                        padding: 10px;
+                                        margin-bottom: 12px;
+                                        border-radius: 6px;
+                                        border: 1px solid #aaa;
+                              }
+
+                              button {
+                                        width: 100%;
+                                        padding: 12px;
+                                        background: #4a90e2;
+                                        color: white;
+                                        border: none;
+                                        border-radius: 6px;
+                                        font-size: 16px;
+                                        cursor: pointer;
+                              }
+
+                              button:hover {
+                                        background: #357abd;
+                              }
+
+                              #qrPreview {
+                                        margin-top: 18px;
+                                        text-align: center;
+                              }
+
+                              #qrPreview img {
+                                        width: 210px;
+                                        height: 210px;
+                              }
+
+                              #historyList {
+                                        margin-top: 26px;
+                              }
+
+                              .historyItem {
+                                        background: #eef4fb;
+                                        padding: 10px;
+                                        margin-bottom: 8px;
+                                        display: flex;
+                                        justify-content: space-between;
+                                        align-items: center;
+                                        border-radius: 6px;
+                              }
+
+                              .historyItem button {
+                                        width: auto;
+                                        padding: 6px 10px;
+                                        font-size: 14px;
+                              }
+                    </style>
+          </head>
+
+          <body>
+
+                    <header>
+                              <img id="profilePic" src="default-avatar.png" alt="Profile">
+                              <h1 id="profileName">আপনার নাম</h1>
+                    </header>
+
+                    <div class="container">
+                              <input type="text" id="textInput" placeholder="এখানে লিখুন QR কোডের টেক্সট..." />
+                              <button onclick="generateQR()">QR কোড বানাও</button>
+
+                              <div id="qrPreview"></div>
+
+                              <h3>History</h3>
+                              <div id="historyList"></div>
+                    </div>
+
+                    <script>
+
+                              // ===== LocalStorage Keys =====
+                              const STORAGE_HISTORY = "qrHistory";
+                              const STORAGE_NAME = "userName";
+                              const STORAGE_PIC = "userPic";
+
+                              // ===== Initial Load =====
+                              window.onload = () => {
+                                        loadProfile();
+                                        loadHistory();
+                              }
+
+                              // ===== Profile Save Prompt =====
+                              function loadProfile() {
+                                        let name = localStorage.getItem(STORAGE_NAME);
+                                        let pic = localStorage.getItem(STORAGE_PIC);
+
+                                        if (!name) {
+                                                  name = prompt("আপনার নাম লিখুন:");
+                                                  localStorage.setItem(STORAGE_NAME, name);
+                                        }
+                                        document.getElementById("profileName").innerText = name;
+
+                                        if (!pic) {
+                                                  pic = prompt("আপনার প্রোফাইল পিকচারের URL দিন:");
+                                                  localStorage.setItem(STORAGE_PIC, pic);
+                                        }
+                                        document.getElementById("profilePic").src = pic;
+                              }
+
+                              // ===== Generate QR =====
+                              function generateQR() {
+                                        const text = document.getElementById("textInput").value.trim();
+                                        if (!text) {
+                                                  alert("টেক্সট দিন!");
+                                                  return;
+                                        }
+
+                                        const apiURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}`;
+
+                                        // Show preview
+                                        document.getElementById("qrPreview").innerHTML =
+                                                  `<img id="qrImg" src="${apiURL}" alt="QR Code"><br><br>
+         <button onclick="downloadQR()">Download QR</button>`;
+
+                                        // Add to history
+                                        saveToHistory(text, apiURL);
+                              }
+
+                              // ===== Save History =====
+                              function saveToHistory(text, url) {
+                                        let history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+
+                                        // avoid duplicates
+                                        history.unshift({ text, url, time: new Date().toLocaleString() });
+                                        if (history.length > 20) history.pop(); // keep last 20
+
+                                        localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+                                        loadHistory();
+                              }
+
+                              // ===== Load History =====
+                              function loadHistory() {
+                                        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+                                        const list = document.getElementById("historyList");
+                                        list.innerHTML = "";
+
+                                        history.forEach((h, idx) => {
+                                                  list.innerHTML += `
+        <div class="historyItem">
+            <div>
+                <strong>${h.text}</strong><br><small>${h.time}</small>
+            </div>
+            <div>
+                <button onclick="showFromHistory(${idx})">View</button>
+                <button onclick="downloadFromHistory(${idx})">DL</button>
+            </div>
+        </div>`;
+                                        });
+                              }
+
+                              // ===== Show from History =====
+                              function showFromHistory(i) {
+                                        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+                                        const item = history[i];
+                                        document.getElementById("qrPreview").innerHTML =
+                                                  `<img src="${item.url}" alt="QR Code"><br><br>
+         <button onclick="downloadQRFromURL('${item.url}')">Download QR</button>`;
+                              }
+
+                              // ===== Download Helpers =====
+                              function downloadQR() {
+                                        const img = document.getElementById("qrImg");
+                                        downloadImage(img.src, "qr-code.png");
+                              }
+
+                              function downloadFromHistory(i) {
+                                        const history = JSON.parse(localStorage.getItem(STORAGE_HISTORY) || "[]");
+                                        downloadImage(history[i].url, "qr-code.png");
+                              }
+
+                              function downloadQRFromURL(url) {
+                                        downloadImage(url, "qr-code.png");
+                              }
+
+                              function downloadImage(url, filename) {
+                                        const a = document.createElement("a");
+                                        a.href = url;
+                                        a.download = filename;
+                                        a.click();
+                              }
+                    </script>
+
+          </body>
+
+</html>
