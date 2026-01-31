@@ -2,7 +2,7 @@
 
 p = 0
 l_s = input()
-l_i = input()
+l_i = input() 
 
 for i in l_i:
     if i == l_s[p]:
