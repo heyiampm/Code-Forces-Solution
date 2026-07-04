@@ -1,11 +1,30 @@
-# problem can be found at http://codeforces.com/problemset/problem/158/A
+import sys
+from collections import Counter
 
-n = int(input())
-t = list(map(int, input().split()))
+def solve():
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    n = int(input_data[0])
+    groups = [int(x) for x in input_data[1:]]
+    
+    counts = Counter(groups)
+    
+    taxis = counts[4]
+    
+    taxis += counts[3]
+    counts[1] = max(0, counts[1] - counts[3])
+    
+    taxis += counts[2] // 2
+    if counts[2] % 2 != 0:
+        taxis += 1
+        counts[1] = max(0, counts[1] - 2)
+        
+    if counts[1] > 0:
+        taxis += (counts[1] + 3) // 4
+        
+    print(taxis)
 
-v = sum(t)
-for i in (x for x in range(3, n) if n % x == 0):
-    for j in range(n // i):
-        v = max(v, sum(t[j:: n // i]))
-
-print(v)
+if __name__ == '__main__':
+    solve()
